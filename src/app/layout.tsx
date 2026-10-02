@@ -10,7 +10,15 @@ export const metadata: Metadata = {
   title: "Merena Beachwear | Biquínis",
   description:
     "Biquínis que traduzem sua essência. Conheça a Merena Beachwear.",
+
   metadataBase: new URL("https://www.merena.com.br"),
+
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
+
   openGraph: {
     title: "Merena Beachwear",
     description:
