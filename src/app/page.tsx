@@ -1,60 +1,40 @@
+"use client";
+
 import Image from "next/image";
 
 const whatsappUrl = "https://wa.link/ohf93g";
 const instagramUrl = "https://www.instagram.com/beachwear.merena/";
 
-const showcases = [
-  {
-    image: "/modelo2.jpg",
-    alt: "Modelo usando biquíni Merena em ambiente natural",
-    label: "Merena Beachwear",
-    className: "md:col-span-2 md:row-span-2",
-  },
-  {
-    image: "/modelo1.jpg",
-    alt: "Detalhe de modelo usando biquíni Merena",
-    label: "Seu estilo, sua essência",
-    className: "",
-  },
-  {
-    image: "/imagem3.jpg",
-    alt: "Embalagem da Merena Beachwear",
-    label: "Identidade em cada detalhe",
-    className: "",
-  },
-  {
-    image: "/modelo3.jpg",
-    alt: "Modelo usando biquíni Merena",
-    label: "Feito para acompanhar você",
-    className: "",
-  },
-  {
-    image: "/calcinha1.jpg",
-    alt: "Detalhes de peças da Merena Beachwear",
-    label: "Detalhes que fazem diferença",
-    className: "",
-  },
-];
+function trackMetaEvent(eventName: string) {
+  if (typeof window === "undefined") return;
+
+  const fbq = (
+    window as Window & {
+      fbq?: (...args: unknown[]) => void;
+    }
+  ).fbq;
+
+  if (fbq) {
+    fbq("trackCustom", eventName);
+  }
+}
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#f4efe5] text-[#34422d]">
+    <main className="relative min-h-screen overflow-hidden bg-[#f4efe5] text-[#34422d]">
+      {/* BACKGROUND */}
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="beach-light beach-light-one" />
+        <div className="beach-light beach-light-two" />
+        <div className="beach-light beach-light-three" />
+      </div>
+
       {/* HERO */}
       <section
         aria-labelledby="hero-title"
         className="relative overflow-hidden"
       >
-        <div
-          aria-hidden="true"
-          className="absolute -left-24 top-24 h-64 w-64 rounded-full bg-[#7f8c69]/10 blur-3xl"
-        />
-
-        <div
-          aria-hidden="true"
-          className="absolute -right-24 bottom-10 h-80 w-80 rounded-full bg-[#c79c72]/15 blur-3xl"
-        />
-
-        <div className="relative mx-auto flex max-w-7xl flex-col px-5 pb-14 pt-7 sm:px-6 lg:grid lg:min-h-screen lg:grid-cols-2 lg:items-center lg:gap-16 lg:px-10 lg:py-12">
+        <div className="mx-auto flex max-w-7xl flex-col px-5 pb-14 pt-7 sm:px-6 lg:grid lg:min-h-screen lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14 lg:px-10 lg:py-12">
           <header className="flex flex-col items-center text-center lg:items-start lg:text-left">
             <Image
               src="/logo.jpeg"
@@ -62,84 +42,94 @@ export default function Home() {
               width={160}
               height={160}
               priority
-              className="h-auto w-20 rounded-full object-cover sm:w-24 lg:w-28"
+              className="hero-reveal hero-reveal-delay-1 h-auto w-20 rounded-full object-cover sm:w-24 lg:w-28"
             />
 
-            <div className="mt-5 max-w-xl">
+            <div className="hero-reveal hero-reveal-delay-2 mt-5 max-w-xl">
               <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#788268] sm:text-xs">
                 Merena Beachwear
               </p>
 
               <h1
                 id="hero-title"
-                className="mx-auto mt-3 max-w-[360px] text-[36px] font-semibold leading-[1.05] tracking-[-0.045em] text-[#34422d] sm:max-w-lg sm:text-5xl lg:mx-0 lg:text-7xl"
+                className="mx-auto mt-3 max-w-[360px] text-[36px] font-semibold leading-[1.06] tracking-[-0.045em] text-[#34422d] sm:max-w-lg sm:text-5xl lg:mx-0 lg:max-w-[520px] lg:text-6xl"
               >
                 Biquínis que traduzem sua essência.
               </h1>
 
-              <p className="mx-auto mt-4 max-w-[340px] text-[15px] leading-6 text-[#66705d] sm:max-w-md sm:text-base lg:mx-0 lg:text-lg lg:leading-7">
+              <p className="mx-auto mt-4 max-w-[340px] text-[15px] leading-6 text-[#66705d] sm:max-w-md sm:text-base lg:mx-0 lg:max-w-[480px] lg:text-lg lg:leading-7">
                 Liberdade, beleza e estilo para aproveitar cada momento do verão.
               </p>
+
+              <div className="hero-reveal hero-reveal-delay-3 mt-7 w-full">
+                <div className="mx-auto flex w-full max-w-md flex-col gap-3 lg:mx-0">
+                  <div className="grid grid-cols-2 gap-3">
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackMetaEvent("WhatsAppClick")}
+                      className="soft-button inline-flex min-h-14 items-center justify-center rounded-full bg-[#4f5f43] px-5 text-center text-sm font-semibold text-white hover:bg-[#3f4d36]"
+                    >
+                      Falar no WhatsApp
+                    </a>
+
+                    <a
+                      href="#colecao"
+                      onClick={() => trackMetaEvent("CollectionView")}
+                      className="soft-button inline-flex min-h-14 items-center justify-center rounded-full border border-[#a9ae9d] px-5 text-center text-sm font-semibold text-[#4f5f43] hover:border-[#4f5f43] hover:bg-[#4f5f43] hover:text-white"
+                    >
+                      Ver coleção
+                    </a>
+                  </div>
+
+                  <a
+                    href={instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackMetaEvent("InstagramClick")}
+                    className="soft-button inline-flex min-h-12 items-center justify-center text-sm font-semibold text-[#66705d] hover:text-[#34422d]"
+                  >
+                    Ver Instagram
+                  </a>
+                </div>
+              </div>
             </div>
           </header>
 
-          <div className="mt-7 lg:mt-0">
-            <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+          {/* HERO IMAGE */}
+          <div className="hero-reveal hero-reveal-delay-4 mt-8 lg:mt-0">
+            <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
               <div
                 aria-hidden="true"
-                className="absolute -inset-2 rounded-[1.8rem] border border-[#7c886d]/20 sm:-inset-3 sm:rounded-[2.2rem]"
+                className="absolute -inset-2 rounded-[18px] border border-[#7c886d]/15 sm:-inset-3"
               />
 
-              <div className="relative overflow-hidden rounded-[1.5rem] bg-[#ddd4c5] shadow-[0_24px_60px_rgba(61,72,52,0.16)] sm:rounded-[2rem]">
+              <div className="relative aspect-[5/4] overflow-hidden rounded-[14px] bg-[#ddd4c5] shadow-[0_24px_70px_rgba(61,72,52,0.14)]">
                 <Image
-                  src="/fotoprincipal.jpeg"
+                  src="/header.png"
                   alt="Campanha Merena Beachwear"
-                  width={1200}
-                  height={1500}
+                  fill
                   priority
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="h-auto w-full"
+                  sizes="(max-width: 1024px) 100vw, 55vw"
+                  className="image-hover object-cover object-center"
                 />
 
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent"
-                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent" />
               </div>
-            </div>
-          </div>
-
-          <div className="mt-7 lg:col-start-1 lg:mt-8">
-            <div className="mx-auto flex w-full max-w-md flex-col gap-3 sm:flex-row lg:mx-0">
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-14 flex-1 items-center justify-center rounded-full bg-[#4f5f43] px-7 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#3f4d36]"
-              >
-                Falar no WhatsApp
-              </a>
-
-              <a
-                href={instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-14 flex-1 items-center justify-center rounded-full border border-[#a9ae9d] px-7 text-sm font-semibold text-[#4f5f43] transition duration-300 hover:border-[#4f5f43] hover:bg-[#4f5f43] hover:text-white"
-              >
-                Ver Instagram
-              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* VITRINE */}
+      {/* COLEÇÃO */}
       <section
+        id="colecao"
         aria-labelledby="modelos-title"
-        className="border-t border-[#556149]/10 px-5 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24"
+        className="relative scroll-mt-8 border-t border-[#556149]/10 px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24"
       >
         <div className="mx-auto max-w-7xl">
-          <header className="mx-auto mb-9 max-w-xl text-center sm:mb-12">
+          <header className="mx-auto mb-10 max-w-xl text-center sm:mb-12">
             <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#788268] sm:text-xs">
               Merena
             </p>
@@ -156,40 +146,113 @@ export default function Home() {
             </p>
           </header>
 
-          <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-4 md:auto-rows-[260px]">
-            {showcases.map((item) => (
-              <article
-                key={item.image}
-                className={`group relative overflow-hidden rounded-[1.4rem] bg-[#ded7c9] ${item.className}`}
-              >
-                <div className="relative h-full min-h-[260px]">
-                  <Image
-                    src={item.image}
-                    alt={item.alt}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                    className="object-cover transition duration-500 group-hover:scale-[1.02]"
-                  />
+          {/* MOBILE + TABLET */}
+          <div className="grid grid-cols-2 gap-3 lg:hidden">
+            <article className="showcase-reveal showcase-delay-1 group relative col-span-2 overflow-hidden rounded-[14px] bg-[#ded7c9]">
+              <div className="relative aspect-[16/9]">
+                <Image
+                  src="/1mobile.png"
+                  alt="Modelo usando biquíni Merena"
+                  fill
+                  sizes="100vw"
+                  className="image-hover object-cover object-center"
+                />
 
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/0 to-transparent"
-                  />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
-                  <p className="absolute bottom-0 left-0 right-0 p-4 text-sm font-medium text-white sm:p-5 sm:text-base">
-                    {item.label}
-                  </p>
-                </div>
-              </article>
-            ))}
+                <p className="absolute bottom-0 left-0 right-0 p-4 text-sm font-semibold text-white sm:p-5 sm:text-base">
+                  Merena Beachwear
+                </p>
+              </div>
+            </article>
+
+            <ShowcaseCard
+              src="/2.png"
+              alt="Identidade visual Merena"
+              label="Identidade em cada detalhe"
+              delay="showcase-delay-2"
+            />
+
+            <ShowcaseCard
+              src="/3.png"
+              alt="Modelos Merena Beachwear"
+              label="Estilo Merena"
+              delay="showcase-delay-3"
+            />
+
+            <ShowcaseCard
+              src="/4.png"
+              alt="Modelo usando biquíni Merena"
+              label="Seu estilo, sua essência"
+              delay="showcase-delay-4"
+            />
+
+            <ShowcaseCard
+              src="/5.png"
+              alt="Detalhes das peças Merena"
+              label="Detalhes que fazem diferença"
+              delay="showcase-delay-5"
+            />
           </div>
 
-          <div className="mt-8 text-center">
+          {/* DESKTOP */}
+          <div className="hidden grid-cols-4 grid-rows-2 gap-4 lg:grid lg:gap-5">
+            <article className="showcase-reveal showcase-delay-1 group relative col-span-2 row-span-2 min-h-[540px] overflow-hidden rounded-[18px] bg-[#ded7c9]">
+              <Image
+                src="/1.png"
+                alt="Modelo usando biquíni Merena"
+                fill
+                sizes="50vw"
+                className="image-hover object-cover object-center"
+              />
+
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+
+              <p className="absolute bottom-0 left-0 right-0 p-6 text-lg font-semibold text-white">
+                Merena Beachwear
+              </p>
+            </article>
+
+            <ShowcaseCard
+              src="/2.png"
+              alt="Identidade visual Merena"
+              label="Identidade em cada detalhe"
+              desktop
+              delay="showcase-delay-2"
+            />
+
+            <ShowcaseCard
+              src="/3.png"
+              alt="Modelos Merena Beachwear"
+              label="Estilo Merena"
+              desktop
+              delay="showcase-delay-3"
+            />
+
+            <ShowcaseCard
+              src="/4.png"
+              alt="Modelo usando biquíni Merena"
+              label="Seu estilo, sua essência"
+              desktop
+              delay="showcase-delay-4"
+            />
+
+            <ShowcaseCard
+              src="/5.png"
+              alt="Detalhes das peças Merena"
+              label="Detalhes que fazem diferença"
+              desktop
+              delay="showcase-delay-5"
+            />
+          </div>
+
+          <div className="mt-9 text-center">
             <a
               href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#a9ae9d] px-7 text-sm font-semibold text-[#4f5f43] transition duration-300 hover:border-[#4f5f43] hover:bg-[#4f5f43] hover:text-white"
+              onClick={() => trackMetaEvent("InstagramClick")}
+              className="soft-button inline-flex min-h-12 items-center justify-center rounded-full border border-[#a9ae9d] px-7 text-sm font-semibold text-[#4f5f43] hover:border-[#4f5f43] hover:bg-[#4f5f43] hover:text-white"
             >
               Ver mais no Instagram
             </a>
@@ -202,7 +265,7 @@ export default function Home() {
         aria-labelledby="contato-title"
         className="px-5 pb-16 sm:px-6 sm:pb-20 lg:px-10 lg:pb-24"
       >
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-[1.7rem] bg-[#4f5f43] px-6 py-12 text-center text-white sm:rounded-[2rem] sm:px-12 sm:py-16">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-[18px] bg-[#4f5f43] px-6 py-12 text-center text-white sm:px-12 sm:py-16">
           <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/60 sm:text-xs">
             Fale com a Merena
           </p>
@@ -222,7 +285,8 @@ export default function Home() {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-7 inline-flex min-h-14 w-full max-w-sm items-center justify-center rounded-full bg-[#f4efe5] px-8 text-sm font-semibold text-[#34422d] transition duration-300 hover:-translate-y-0.5 hover:bg-white sm:w-auto"
+            onClick={() => trackMetaEvent("WhatsAppClick")}
+            className="soft-button mt-7 inline-flex min-h-14 w-full max-w-sm items-center justify-center rounded-full bg-[#f4efe5] px-8 text-sm font-semibold text-[#34422d] hover:bg-white sm:w-auto"
           >
             Chamar no WhatsApp
           </a>
@@ -238,6 +302,7 @@ export default function Home() {
             href={instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackMetaEvent("InstagramClick")}
             className="transition hover:text-[#34422d]"
           >
             @beachwear.merena
@@ -245,5 +310,47 @@ export default function Home() {
         </div>
       </footer>
     </main>
+  );
+}
+
+function ShowcaseCard({
+  src,
+  alt,
+  label,
+  desktop = false,
+  delay = "",
+}: {
+  src: string;
+  alt: string;
+  label: string;
+  desktop?: boolean;
+  delay?: string;
+}) {
+  return (
+    <article
+      className={`showcase-reveal ${delay} group relative overflow-hidden bg-[#ded7c9] ${
+        desktop
+          ? "min-h-[260px] rounded-[18px]"
+          : "aspect-[4/5] rounded-[14px]"
+      }`}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes={desktop ? "25vw" : "50vw"}
+        className="image-hover object-cover object-center"
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+
+      <p
+        className={`absolute bottom-0 left-0 right-0 font-semibold text-white ${
+          desktop ? "p-5 text-base" : "p-4 text-sm"
+        }`}
+      >
+        {label}
+      </p>
+    </article>
   );
 }
