@@ -3,13 +3,14 @@
 import Image from "next/image";
 
 const whatsappUrl = "https://wa.link/ohf93g";
+const catalogUrl = "https://wa.me/c/250904154501186";
 const instagramUrl = "https://www.instagram.com/beachwear.merena/";
 
 function trackMetaEvent(eventName: string) {
   if (typeof window === "undefined") return;
 
   const fbq = (
-    window as Window & {
+    window as typeof window & {
       fbq?: (...args: unknown[]) => void;
     }
   ).fbq;
@@ -71,12 +72,14 @@ export default function Home() {
                       onClick={() => trackMetaEvent("WhatsAppClick")}
                       className="soft-button inline-flex min-h-14 items-center justify-center rounded-full bg-[#4f5f43] px-5 text-center text-sm font-semibold text-white hover:bg-[#3f4d36]"
                     >
-                      Falar no WhatsApp
+                      Chamar no WhatsApp
                     </a>
 
                     <a
-                      href="#colecao"
-                      onClick={() => trackMetaEvent("CollectionView")}
+                      href={catalogUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackMetaEvent("CatalogClick")}
                       className="soft-button inline-flex min-h-14 items-center justify-center rounded-full border border-[#a9ae9d] px-5 text-center text-sm font-semibold text-[#4f5f43] hover:border-[#4f5f43] hover:bg-[#4f5f43] hover:text-white"
                     >
                       Ver coleção
@@ -122,11 +125,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* COLEÇÃO */}
+      {/* VITRINE */}
       <section
-        id="colecao"
         aria-labelledby="modelos-title"
-        className="relative scroll-mt-8 border-t border-[#556149]/10 px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24"
+        className="relative border-t border-[#556149]/10 px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24"
       >
         <div className="mx-auto max-w-7xl">
           <header className="mx-auto mb-10 max-w-xl text-center sm:mb-12">
@@ -246,7 +248,17 @@ export default function Home() {
             />
           </div>
 
-          <div className="mt-9 text-center">
+          <div className="mt-9 flex flex-col items-center gap-3 text-center sm:flex-row sm:justify-center">
+            <a
+              href={catalogUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackMetaEvent("CatalogClick")}
+              className="soft-button inline-flex min-h-12 items-center justify-center rounded-full bg-[#4f5f43] px-7 text-sm font-semibold text-white hover:bg-[#3f4d36]"
+            >
+              Ver coleção no WhatsApp
+            </a>
+
             <a
               href={instagramUrl}
               target="_blank"
