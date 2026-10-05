@@ -27,3 +27,210 @@ a {
   background: #4f5f43;
   color: #ffffff;
 }
+
+/* =========================================================
+   BACKGROUND — LUZES SUAVES
+   ========================================================= */
+
+.beach-light {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.beach-light-one {
+  top: -140px;
+  left: -120px;
+  width: 360px;
+  height: 360px;
+  background: #d9c9a9;
+}
+
+.beach-light-two {
+  top: 30%;
+  right: -180px;
+  width: 420px;
+  height: 420px;
+  background: #c8d0ba;
+}
+
+.beach-light-three {
+  bottom: -180px;
+  left: 25%;
+  width: 420px;
+  height: 420px;
+  background: #ddd0b9;
+}
+
+/* =========================================================
+   HERO — SEM ANIMAÇÃO NA IMAGEM
+   ========================================================= */
+
+.hero-image-frame {
+  overflow: hidden;
+}
+
+/* =========================================================
+   ANIMAÇÕES GERAIS
+   ========================================================= */
+
+.hero-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: heroReveal 0.8s ease-out forwards;
+}
+
+.hero-reveal-delay-1 {
+  animation-delay: 0.05s;
+}
+
+.hero-reveal-delay-2 {
+  animation-delay: 0.15s;
+}
+
+.hero-reveal-delay-3 {
+  animation-delay: 0.25s;
+}
+
+.hero-reveal-delay-4 {
+  animation-delay: 0.35s;
+}
+
+@keyframes heroReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   IMAGENS
+   ========================================================= */
+
+.image-hover {
+  transition:
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.5s ease;
+}
+
+.group:hover .image-hover {
+  transform: scale(1.035);
+}
+
+/* =========================================================
+   BOTÕES
+   ========================================================= */
+
+.soft-button {
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.soft-button:hover {
+  transform: translateY(-2px);
+}
+
+.soft-button:active {
+  transform: translateY(0);
+}
+
+/* =========================================================
+   VITRINE
+   ========================================================= */
+
+.showcase-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: showcaseReveal 0.8s ease-out forwards;
+}
+
+.showcase-delay-1 {
+  animation-delay: 0.05s;
+}
+
+.showcase-delay-2 {
+  animation-delay: 0.12s;
+}
+
+.showcase-delay-3 {
+  animation-delay: 0.19s;
+}
+
+.showcase-delay-4 {
+  animation-delay: 0.26s;
+}
+
+.showcase-delay-5 {
+  animation-delay: 0.33s;
+}
+
+@keyframes showcaseReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   ACESSIBILIDADE
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-reveal,
+  .showcase-reveal {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .image-hover,
+  .soft-button {
+    transition: none;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+  .beach-light {
+    filter: blur(70px);
+    opacity: 0.25;
+  }
+
+  .beach-light-one {
+    width: 260px;
+    height: 260px;
+  }
+
+  .beach-light-two {
+    width: 300px;
+    height: 300px;
+  }
+
+  .beach-light-three {
+    width: 300px;
+    height: 300px;
+  }
+}

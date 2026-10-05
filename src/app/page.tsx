@@ -31,11 +31,8 @@ export default function Home() {
       </div>
 
       {/* HERO */}
-      <section
-        aria-labelledby="hero-title"
-        className="relative overflow-hidden"
-      >
-        <div className="mx-auto flex max-w-7xl flex-col px-5 pb-14 pt-7 sm:px-6 lg:grid lg:min-h-screen lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14 lg:px-10 lg:py-12">
+      <section aria-labelledby="hero-title" className="relative overflow-hidden">
+        <div className="mx-auto flex max-w-7xl flex-col px-5 pb-14 pt-7 sm:px-6 lg:grid lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-10 lg:px-10 lg:py-12">
           <header className="flex flex-col items-center text-center lg:items-start lg:text-left">
             <Image
               src="/logo.jpeg"
@@ -53,12 +50,12 @@ export default function Home() {
 
               <h1
                 id="hero-title"
-                className="mx-auto mt-3 max-w-[360px] text-[36px] font-semibold leading-[1.06] tracking-[-0.045em] text-[#34422d] sm:max-w-lg sm:text-5xl lg:mx-0 lg:max-w-[520px] lg:text-6xl"
+                className="mx-auto mt-3 max-w-[360px] text-[36px] font-semibold leading-[1.06] tracking-[-0.045em] text-[#34422d] sm:max-w-lg sm:text-5xl lg:mx-0 lg:max-w-[500px] lg:text-6xl"
               >
                 Biquínis que traduzem sua essência.
               </h1>
 
-              <p className="mx-auto mt-4 max-w-[340px] text-[15px] leading-6 text-[#66705d] sm:max-w-md sm:text-base lg:mx-0 lg:max-w-[480px] lg:text-lg lg:leading-7">
+              <p className="mx-auto mt-4 max-w-[340px] text-[15px] leading-6 text-[#66705d] sm:max-w-md sm:text-base lg:mx-0 lg:max-w-[460px] lg:text-lg lg:leading-7">
                 Liberdade, beleza e estilo para aproveitar cada momento do verão.
               </p>
 
@@ -102,23 +99,24 @@ export default function Home() {
 
           {/* HERO IMAGE */}
           <div className="hero-reveal hero-reveal-delay-4 mt-8 lg:mt-0">
-            <div className="relative mx-auto w-full max-w-xl lg:max-w-none">
+            <div className="relative mx-auto w-full max-w-[680px] lg:ml-auto lg:mr-0">
               <div
                 aria-hidden="true"
                 className="absolute -inset-2 rounded-[18px] border border-[#7c886d]/15 sm:-inset-3"
               />
 
-              <div className="relative aspect-[5/4] overflow-hidden rounded-[14px] bg-[#ddd4c5] shadow-[0_24px_70px_rgba(61,72,52,0.14)]">
+              <div className="hero-image-frame relative overflow-hidden rounded-[14px] bg-[#ddd4c5] shadow-[0_24px_70px_rgba(61,72,52,0.14)]">
                 <Image
                   src="/header.png"
                   alt="Campanha Merena Beachwear"
-                  fill
+                  width={900}
+                  height={1900}
                   priority
-                  sizes="(max-width: 1024px) 100vw, 55vw"
-                  className="image-hover object-cover object-center"
+                  sizes="(max-width: 1024px) 92vw, 680px"
+                  className="image-hover h-auto w-full object-contain"
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent" />
               </div>
             </div>
           </div>
