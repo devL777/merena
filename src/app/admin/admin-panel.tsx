@@ -3,18 +3,23 @@
 import Image from "next/image";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import type { Product } from "@/lib/products";
+import type { SiteAsset } from "@/lib/site-assets";
 
 type AdminProduct = Product & { sort_order: number };
+type AdminSiteAsset = SiteAsset & { sort_order: number };
 
 export default function AdminPanel({ configured }: { configured: boolean }) {
   const [authenticated, setAuthenticated] = useState(false);
   const [products, setProducts] = useState<AdminProduct[]>([]);
+  const [siteAssets, setSiteAssets] = useState<AdminSiteAsset[]>([]);
   const [password, setPassword] = useState("");
   const [selectedImages, setSelectedImages] = useState<Record<string, File | undefined>>({});
+  const [selectedSiteImages, setSelectedSiteImages] = useState<Record<string, File | undefined>>({});
   const [busyId, setBusyId] = useState<string | null>(null);
-  const [busyAction, setBusyAction] = useState<"login" | "save" | "image" | "logout" | null>(null);
+  const [busyAction, setBusyAction] = useState<"login" | "save" | "image" | "site-image" | "logout" | null>(null);
   const [message, setMessage] = useState("");
   const [messageIsError, setMessageIsError] = useState(false);
+  const [siteAssetsMessage, setSiteAssetsMessage] = useState("");
 
   const loadProducts = useCallback(async () => {
     const response = await fetch("/api/admin/products", { cache: "no-store" });
@@ -23,6 +28,19 @@ export default function AdminPanel({ configured }: { configured: boolean }) {
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || "Não foi possível carregar o painel.");
     setProducts(result);
+
+    const assetsResponse = await fetch("/api/admin/site-assets", { cache: "no-store" });
+    const assetsResult = await assetsResponse.json();
+    if (assetsResponse.ok && Array.isArray(assetsResult)) {
+      setSiteAssets(assetsResult);
+      setSiteAssetsMessage("");
+    } else {
+      setSiteAssets([]);
+      setSiteAssetsMessage(
+        assetsResult.error || "Não foi possível carregar as fotos das outras seções.",
+      );
+    }
+
     setAuthenticated(true);
     return true;
   }, []);
@@ -121,11 +139,45 @@ export default function AdminPanel({ configured }: { configured: boolean }) {
     }
   }
 
+  async function uploadSiteImage(asset: AdminSiteAsset) {
+    const image = selectedSiteImages[asset.id];
+    if (!image) {
+      showMessage("Escolha uma foto primeiro.", true);
+      return;
+    }
+
+    const busyKey = `site-${asset.id}`;
+    setBusyId(busyKey);
+    setBusyAction("site-image");
+    try {
+      const form = new FormData();
+      form.set("id", asset.id);
+      form.set("image", image);
+      const response = await fetch("/api/admin/site-assets/image", {
+        method: "POST",
+        body: form,
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Não foi possível enviar a foto.");
+      setSiteAssets((current) => current.map((item) =>
+        item.id === asset.id ? { ...item, image: result.image_url } : item,
+      ));
+      setSelectedSiteImages((current) => ({ ...current, [asset.id]: undefined }));
+      showMessage(`Foto atualizada: ${asset.label}.`);
+    } catch (error) {
+      showMessage(error instanceof Error ? error.message : "Não foi possível enviar a foto.", true);
+    } finally {
+      setBusyId(null);
+      setBusyAction(null);
+    }
+  }
+
   async function logout() {
     setBusyAction("logout");
     await fetch("/api/admin/login", { method: "DELETE" });
     setAuthenticated(false);
     setProducts([]);
+    setSiteAssets([]);
     setBusyAction(null);
     showMessage("Você saiu do painel.");
   }
@@ -186,6 +238,61 @@ export default function AdminPanel({ configured }: { configured: boolean }) {
           </form>
         ) : (
           <div className="space-y-5">
+            <section className="rounded-2xl border border-[#556149]/10 bg-white/70 p-4 shadow-sm sm:p-5">
+              <h2 className="text-xl font-semibold">Fotos do site</h2>
+              <p className="mt-1 text-sm leading-6 text-[#687060]">
+                Troque as fotos do cabeçalho, do logo e da vitrine. O cabeçalho também é usado na seção Sobre a Merena.
+              </p>
+            </section>
+
+            {siteAssetsMessage && (
+              <p role="status" className="rounded-xl bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+                {siteAssetsMessage}
+              </p>
+            )}
+
+            {siteAssets.map((asset) => (
+              <section key={asset.id} className="grid gap-5 rounded-2xl border border-[#556149]/10 bg-white/70 p-4 shadow-sm sm:grid-cols-[150px_1fr] sm:p-5">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-[#ded7c9] sm:aspect-auto sm:min-h-[190px]">
+                  <Image src={asset.image} alt={asset.alt} fill sizes="150px" className="object-cover" unoptimized />
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-base font-semibold">{asset.label}</h3>
+                    <p className="mt-1 text-sm leading-5 text-[#687060]">{asset.description}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold" htmlFor={`site-image-${asset.id}`}>Trocar foto</label>
+                    <input
+                      id={`site-image-${asset.id}`}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={(event) => setSelectedSiteImages((current) => ({ ...current, [asset.id]: event.target.files?.[0] }))}
+                      className="mt-1.5 block w-full text-sm text-[#687060] file:mr-3 file:rounded-lg file:border-0 file:bg-[#e9e8df] file:px-3 file:py-2 file:font-medium file:text-[#34422d]"
+                    />
+                    <p className="mt-1 text-xs leading-5 text-[#788268]">
+                      {asset.recommendation} JPG, PNG ou WebP, até 5 MB. Ajuste a imagem antes de enviar; o site pode cortá-la para encaixar.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => uploadSiteImage(asset)}
+                    disabled={busyId === `site-${asset.id}` || !selectedSiteImages[asset.id]}
+                    className="rounded-xl border border-[#556149]/20 px-4 py-2.5 text-sm font-semibold text-[#34422d] hover:bg-[#f4efe5] disabled:opacity-50"
+                  >
+                    {busyId === `site-${asset.id}` && busyAction === "site-image" ? "Enviando…" : "Enviar foto"}
+                  </button>
+                </div>
+              </section>
+            ))}
+
+            <section className="rounded-2xl border border-[#556149]/10 bg-white/70 p-4 shadow-sm sm:p-5">
+              <h2 className="text-xl font-semibold">Fotos dos biquínis</h2>
+              <p className="mt-1 text-sm leading-6 text-[#687060]">
+                Edite o nome, a descrição e a foto de cada modelo exibido no carrossel.
+              </p>
+            </section>
+
             {products.map((product) => (
               <section key={product.id} className="grid gap-5 rounded-2xl border border-[#556149]/10 bg-white/70 p-4 shadow-sm sm:grid-cols-[150px_1fr] sm:p-5">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-[#ded7c9] sm:aspect-auto sm:min-h-[190px]">

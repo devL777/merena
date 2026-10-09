@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { defaultProducts, type Product } from "@/lib/products";
+import { defaultSiteAssets, type SiteAsset } from "@/lib/site-assets";
 
 const whatsappUrl = "https://wa.link/ohf93g";
 const catalogUrl = "https://wa.me/c/250904154501186";
@@ -31,12 +32,24 @@ function trackMetaEvent(eventName: string) {
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>(defaultProducts);
+  const [siteAssets, setSiteAssets] = useState<SiteAsset[]>(defaultSiteAssets);
+
+  function assetImage(id: string) {
+    return siteAssets.find((asset) => asset.id === id)?.image ?? "/header.png";
+  }
 
   useEffect(() => {
     fetch("/api/products", { cache: "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then((data: Product[] | null) => {
         if (Array.isArray(data) && data.length) setProducts(data);
+      })
+      .catch(() => undefined);
+
+    fetch("/api/site-assets", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data: SiteAsset[] | null) => {
+        if (Array.isArray(data) && data.length) setSiteAssets(data);
       })
       .catch(() => undefined);
   }, []);
@@ -58,10 +71,11 @@ export default function Home() {
         <div className="mx-auto flex max-w-7xl flex-col px-5 pb-14 pt-7 sm:px-6 lg:grid lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-10 lg:px-10 lg:py-12">
           <header className="flex flex-col items-center text-center lg:items-start lg:text-left">
             <Image
-              src="/logo.jpeg"
+              src={assetImage("brand-logo")}
               alt="Símbolo da Merena Beachwear"
               width={160}
               height={160}
+              unoptimized
               priority
               className="hero-reveal hero-reveal-delay-1 h-auto w-20 rounded-full object-cover sm:w-24 lg:w-28"
             />
@@ -146,10 +160,11 @@ export default function Home() {
 
               <div className="hero-image-frame relative overflow-hidden rounded-[14px] bg-[#ddd4c5] shadow-[0_24px_70px_rgba(61,72,52,0.14)]">
                 <Image
-                  src="/header.png"
+                  src={assetImage("hero-campaign")}
                   alt="Campanha Merena Beachwear"
                   width={900}
                   height={1900}
+                  unoptimized
                   priority
                   sizes="(max-width: 1024px) 92vw, 680px"
                   className="image-hover h-auto w-full object-contain"
@@ -259,9 +274,10 @@ export default function Home() {
             <article className="scroll-reveal-left group relative col-span-2 overflow-hidden rounded-[14px] bg-[#ded7c9]">
               <div className="relative aspect-[16/9]">
                 <Image
-                  src="/1mobile.png"
+                  src={assetImage("gallery-feature-mobile")}
                   alt="Modelo usando biquíni Merena"
                   fill
+                  unoptimized
                   sizes="100vw"
                   className="image-hover object-cover object-center"
                 />
@@ -275,28 +291,28 @@ export default function Home() {
             </article>
 
             <ShowcaseCard
-              src="/2.png"
+              src={assetImage("gallery-identity")}
               alt="Identidade visual Merena"
               label="Identidade em cada detalhe"
               delay="showcase-delay-2"
             />
 
             <ShowcaseCard
-              src="/3.png"
+              src={assetImage("gallery-style")}
               alt="Modelos Merena Beachwear"
               label="Estilo Merena"
               delay="showcase-delay-3"
             />
 
             <ShowcaseCard
-              src="/4.png"
+              src={assetImage("gallery-essence")}
               alt="Modelo usando biquíni Merena"
               label="Seu estilo, sua essência"
               delay="showcase-delay-4"
             />
 
             <ShowcaseCard
-              src="/5.png"
+              src={assetImage("gallery-details")}
               alt="Detalhes das peças Merena"
               label="Detalhes que fazem diferença"
               delay="showcase-delay-5"
@@ -307,9 +323,10 @@ export default function Home() {
           <div className="hidden grid-cols-4 grid-rows-2 gap-4 lg:grid lg:gap-5">
             <article className="scroll-reveal-left group relative col-span-2 row-span-2 min-h-[540px] overflow-hidden rounded-[18px] bg-[#ded7c9]">
               <Image
-                src="/1.png"
+                src={assetImage("gallery-feature-desktop")}
                 alt="Modelo usando biquíni Merena"
                 fill
+                unoptimized
                 sizes="50vw"
                 className="image-hover object-cover object-center"
               />
@@ -322,7 +339,7 @@ export default function Home() {
             </article>
 
             <ShowcaseCard
-              src="/2.png"
+              src={assetImage("gallery-identity")}
               alt="Identidade visual Merena"
               label="Identidade em cada detalhe"
               desktop
@@ -330,7 +347,7 @@ export default function Home() {
             />
 
             <ShowcaseCard
-              src="/3.png"
+              src={assetImage("gallery-style")}
               alt="Modelos Merena Beachwear"
               label="Estilo Merena"
               desktop
@@ -338,7 +355,7 @@ export default function Home() {
             />
 
             <ShowcaseCard
-              src="/4.png"
+              src={assetImage("gallery-essence")}
               alt="Modelo usando biquíni Merena"
               label="Seu estilo, sua essência"
               desktop
@@ -346,7 +363,7 @@ export default function Home() {
             />
 
             <ShowcaseCard
-              src="/5.png"
+              src={assetImage("gallery-details")}
               alt="Detalhes das peças Merena"
               label="Detalhes que fazem diferença"
               desktop
@@ -431,10 +448,11 @@ export default function Home() {
             <div className="scroll-reveal-right">
               <div className="relative overflow-hidden rounded-[18px] bg-[#ded7c9] shadow-[0_24px_60px_rgba(61,72,52,0.12)]">
                 <Image
-                  src="/header.png"
+                  src={assetImage("hero-campaign")}
                   alt="Biquínis Merena em campanha"
                   width={900}
                   height={1200}
+                  unoptimized
                   className="h-auto w-full object-cover"
                 />
               </div>
@@ -693,6 +711,7 @@ function ShowcaseCard({
         alt={alt}
         fill
         sizes={desktop ? "25vw" : "50vw"}
+        unoptimized
         className="image-hover object-cover object-center"
       />
 
