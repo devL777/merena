@@ -222,7 +222,10 @@ export default function AdminPanel({ configured }: { configured: boolean }) {
                       onChange={(event) => setSelectedImages((current) => ({ ...current, [product.id]: event.target.files?.[0] }))}
                       className="mt-1.5 block w-full text-sm text-[#687060] file:mr-3 file:rounded-lg file:border-0 file:bg-[#e9e8df] file:px-3 file:py-2 file:font-medium file:text-[#34422d]"
                     />
-                    <p className="mt-1 text-xs text-[#788268]">JPG, PNG ou WebP, até 5 MB.</p>
+                    <p className="mt-1 text-xs leading-5 text-[#788268]">
+                      Antes de enviar, ajuste a foto para o formato vertical 4:5 (ideal: 1080 × 1350 px).
+                      O site corta a imagem para esse formato. JPG, PNG ou WebP, até 5 MB.
+                    </p>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <button
