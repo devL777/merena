@@ -150,41 +150,18 @@ a {
    ========================================================= */
 
 .showcase-reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: showcaseReveal 0.8s ease-out forwards;
+  opacity: 1;
+  transform: none;
+  animation: none;
 }
 
-.showcase-delay-1 {
-  animation-delay: 0.05s;
+.carousel-no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.showcase-delay-2 {
-  animation-delay: 0.12s;
-}
-
-.showcase-delay-3 {
-  animation-delay: 0.19s;
-}
-
-.showcase-delay-4 {
-  animation-delay: 0.26s;
-}
-
-.showcase-delay-5 {
-  animation-delay: 0.33s;
-}
-
-@keyframes showcaseReveal {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.carousel-no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* =========================================================

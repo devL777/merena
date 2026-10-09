@@ -1,11 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { defaultProducts, type Product } from "@/lib/products";
 
 const whatsappUrl = "https://wa.link/ohf93g";
 const catalogUrl = "https://wa.me/c/250904154501186";
 const instagramUrl = "https://www.instagram.com/beachwear.merena/";
+const facebookUrl = "https://www.facebook.com/people/Merena-Beachwear/61570299508001/";
+const whatsappProductNumber = "250904154501186";
+
+function productWhatsAppUrl(name: string) {
+  const message = `Olá! Tenho interesse no ${name} da Merena Beachwear. Pode me passar mais informações e o valor?`;
+  return `https://wa.me/${whatsappProductNumber}?text=${encodeURIComponent(message)}`;
+}
 
 function trackMetaEvent(eventName: string) {
   if (typeof window === "undefined") return;
@@ -22,37 +30,15 @@ function trackMetaEvent(eventName: string) {
 }
 
 export default function Home() {
+  const [products, setProducts] = useState<Product[]>(defaultProducts);
+
   useEffect(() => {
-    const elements = document.querySelectorAll(
-      ".scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-scale, .showcase-reveal"
-    );
-
-    if (!("IntersectionObserver" in window)) {
-      elements.forEach((element) => {
-        element.classList.add("is-visible");
-      });
-
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.12,
-        rootMargin: "0px 0px -60px 0px",
-      }
-    );
-
-    elements.forEach((element) => observer.observe(element));
-
-    return () => observer.disconnect();
+    fetch("/api/products", { cache: "no-store" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data: Product[] | null) => {
+        if (Array.isArray(data) && data.length) setProducts(data);
+      })
+      .catch(() => undefined);
   }, []);
 
   return (
@@ -121,15 +107,30 @@ export default function Home() {
                     </a>
                   </div>
 
-                  <a
-                    href={instagramUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => trackMetaEvent("InstagramClick")}
-                    className="soft-button inline-flex min-h-12 items-center justify-center text-sm font-semibold text-[#66705d] hover:text-[#34422d]"
-                  >
-                    Ver Instagram
-                  </a>
+                  <div className="flex items-center justify-center gap-5 lg:justify-start">
+                    <a
+                      href={instagramUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackMetaEvent("InstagramClick")}
+                      aria-label="Instagram da Merena"
+                      title="Instagram"
+                      className="soft-button inline-flex h-12 w-12 items-center justify-center rounded-full text-[#66705d] hover:text-[#34422d]"
+                    >
+                      <InstagramIcon />
+                    </a>
+                    <a
+                      href={facebookUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackMetaEvent("FacebookClick")}
+                      aria-label="Facebook da Merena"
+                      title="Facebook"
+                      className="soft-button inline-flex h-12 w-12 items-center justify-center rounded-full text-[#66705d] hover:text-[#34422d]"
+                    >
+                      <FacebookIcon />
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -158,6 +159,75 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* CARROSSEL DE PRODUTOS */}
+      <section
+        aria-labelledby="produtos-title"
+        className="relative border-t border-[#556149]/10 px-4 py-14 sm:px-6 sm:py-16 lg:px-10"
+      >
+        <div className="mx-auto max-w-7xl">
+          <header className="scroll-reveal mb-7 flex items-end justify-between gap-4 sm:mb-9">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#788268] sm:text-xs">
+                Escolha o seu
+              </p>
+              <h2
+                id="produtos-title"
+                className="mt-2 text-2xl font-semibold tracking-[-0.035em] text-[#34422d] sm:text-4xl"
+              >
+                Biquínis Merena
+              </h2>
+            </div>
+            <p className="hidden pb-1 text-sm text-[#687060] sm:block">
+              Deslize para ver os modelos
+            </p>
+          </header>
+
+          <div
+            aria-label="Modelos de biquíni. Deslize horizontalmente para navegar."
+            className="carousel-no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain px-4 pb-4 sm:-mx-6 sm:gap-5 sm:px-6 lg:-mx-10 lg:px-10"
+          >
+            {products.map((product) => (
+              <a
+                key={product.id}
+                href={productWhatsAppUrl(product.name)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackMetaEvent("WhatsAppClick")}
+                aria-label={`Consultar ${product.name} pelo WhatsApp`}
+                className="soft-button group w-[72vw] max-w-[280px] shrink-0 snap-start overflow-hidden rounded-[16px] border border-[#556149]/10 bg-white/60 text-left shadow-[0_10px_35px_rgba(61,72,52,0.07)] sm:w-[260px]"
+              >
+                <div className="relative aspect-[4/5] overflow-hidden bg-[#ded7c9]">
+                  <Image
+                    src={product.image}
+                    alt={product.alt}
+                    fill
+                    unoptimized
+                    sizes="(max-width: 640px) 72vw, 260px"
+                    className="image-hover object-cover object-center"
+                  />
+                </div>
+                <div className="p-4">
+                  <div>
+                    <p className="text-sm font-semibold text-[#34422d]">
+                      {product.name}
+                    </p>
+                    {product.description && (
+                      <p className="mt-1 line-clamp-2 min-h-10 text-sm text-[#687060]">
+                        {product.description}
+                      </p>
+                    )}
+                    <p className="mt-1 text-sm text-[#687060]">Consulte o valor</p>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+          <p className="mt-1 text-xs text-[#687060] sm:hidden">
+            Deslize para ver os modelos
+          </p>
         </div>
       </section>
 
@@ -308,12 +378,77 @@ export default function Home() {
         </div>
       </section>
 
+      {/* SOBRE A MARCA */}
+      <section className="px-5 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
+            <div className="scroll-reveal">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#788268] sm:text-xs">
+                Sobre a Merena
+              </p>
+
+              <h2 className="mt-3 max-w-xl text-3xl font-semibold tracking-[-0.035em] text-[#34422d] sm:text-5xl">
+                Estilo que celebra confiança e liberdade.
+              </h2>
+
+              <p className="mt-4 max-w-lg text-[15px] leading-6 text-[#687060] sm:text-base">
+                A Merena nasceu para acompanhar o verão com peças que unem
+                conforto, versatilidade e personalidade. Cada produção foi
+                pensada para valorizar sua essência e deixar você mais confiante
+                em cada momento.
+              </p>
+
+              <div className="mt-7 grid gap-4 sm:grid-cols-3">
+                {[
+                  {
+                    title: "Conforto",
+                    text: "Materiais leves e peças pensadas para o dia a dia.",
+                  },
+                  {
+                    title: "Estilo",
+                    text: "Linhas que realçam sua personalidade e deixam o look único.",
+                  },
+                  {
+                    title: "Atendimento",
+                    text: "Fale diretamente com a marca e tire suas dúvidas rapidamente.",
+                  },
+                ].map((item) => (
+                  <div
+                    key={item.title}
+                    className="rounded-[16px] border border-[#556149]/10 bg-white/60 p-4 shadow-[0_10px_30px_rgba(61,72,52,0.04)]"
+                  >
+                    <p className="text-base font-semibold text-[#34422d]">
+                      {item.title}
+                    </p>
+                    <p className="mt-2 text-sm leading-5 text-[#687060]">
+                      {item.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="scroll-reveal-right">
+              <div className="relative overflow-hidden rounded-[18px] bg-[#ded7c9] shadow-[0_24px_60px_rgba(61,72,52,0.12)]">
+                <Image
+                  src="/header.png"
+                  alt="Biquínis Merena em campanha"
+                  width={900}
+                  height={1200}
+                  className="h-auto w-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA FINAL */}
       <section
         aria-labelledby="contato-title"
         className="px-5 pb-16 sm:px-6 sm:pb-20 lg:px-10 lg:pb-24"
       >
-        <div className="scroll-scale mx-auto max-w-7xl overflow-hidden rounded-[18px] bg-[#4f5f43] px-6 py-12 text-center text-white sm:px-12 sm:py-16">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-[18px] bg-[#4f5f43] px-6 py-12 text-center text-white sm:px-12 sm:py-16">
           <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/60 sm:text-xs">
             Fale com a Merena
           </p>
@@ -346,15 +481,30 @@ export default function Home() {
         <div className="scroll-reveal mx-auto flex max-w-7xl flex-col items-center gap-3 text-center text-sm text-[#747c6c] sm:flex-row sm:justify-between sm:text-left">
           <p>© Merena Beachwear</p>
 
-          <a
-            href={instagramUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => trackMetaEvent("InstagramClick")}
-            className="transition hover:text-[#34422d]"
-          >
-            @beachwear.merena
-          </a>
+          <div className="flex items-center gap-4">
+            <a
+              href={instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackMetaEvent("InstagramClick")}
+              aria-label="Instagram da Merena"
+              title="Instagram"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full text-[#66705d] transition hover:text-[#34422d]"
+            >
+              <InstagramIcon />
+            </a>
+            <a
+              href={facebookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackMetaEvent("FacebookClick")}
+              aria-label="Facebook da Merena"
+              title="Facebook"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full text-[#66705d] transition hover:text-[#34422d]"
+            >
+              <FacebookIcon />
+            </a>
+          </div>
         </div>
       </footer>
 
@@ -381,71 +531,6 @@ export default function Home() {
 
         .hero-reveal-delay-4 {
           animation-delay: 0.18s;
-        }
-
-        .scroll-reveal,
-        .scroll-reveal-left,
-        .scroll-reveal-right,
-        .scroll-scale {
-          opacity: 0;
-          transition:
-            opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-            transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-          will-change: opacity, transform;
-        }
-
-        .scroll-reveal {
-          transform: translateY(42px);
-        }
-
-        .scroll-reveal-left {
-          transform: translateX(-45px);
-        }
-
-        .scroll-reveal-right {
-          transform: translateX(45px);
-        }
-
-        .scroll-scale {
-          transform: translateY(35px) scale(0.96);
-        }
-
-        .scroll-reveal.is-visible,
-        .scroll-reveal-left.is-visible,
-        .scroll-reveal-right.is-visible,
-        .scroll-scale.is-visible {
-          opacity: 1;
-          transform: translate(0) scale(1);
-        }
-
-        .showcase-reveal {
-          opacity: 0;
-          transform: translateY(45px) scale(0.97);
-          animation: none;
-          transition:
-            opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-            transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .showcase-reveal.is-visible {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-
-        .showcase-reveal:nth-child(2) {
-          transition-delay: 0.08s;
-        }
-
-        .showcase-reveal:nth-child(3) {
-          transition-delay: 0.16s;
-        }
-
-        .showcase-reveal:nth-child(4) {
-          transition-delay: 0.24s;
-        }
-
-        .showcase-reveal:nth-child(5) {
-          transition-delay: 0.32s;
         }
 
         .soft-button {
@@ -536,16 +621,6 @@ export default function Home() {
             animation: none;
           }
 
-          .scroll-reveal,
-          .scroll-reveal-left,
-          .scroll-reveal-right,
-          .scroll-scale,
-          .showcase-reveal {
-            opacity: 1;
-            transform: none;
-            transition: none;
-          }
-
           .beach-light {
             animation: none;
           }
@@ -557,6 +632,39 @@ export default function Home() {
         }
       `}</style>
     </main>
+  );
+}
+
+function InstagramIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-5 w-5 shrink-0"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      focusable="false"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="18" cy="6" r="0.8" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function FacebookIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className="h-4 w-4 shrink-0 fill-current"
+      focusable="false"
+    >
+      <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.019 4.388 11.016 10.125 11.926v-8.432H7.078v-3.494h3.047V9.41c0-3.025 1.792-4.704 4.533-4.704 1.312 0 2.686.235 2.686.235v2.973h-1.513c-1.49 0-1.954.933-1.954 1.889v2.27h3.328l-.532 3.494h-2.796v8.432C19.612 23.09 24 18.092 24 12.073z" />
+    </svg>
   );
 }
 

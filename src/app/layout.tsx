@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Script from "next/script";
 import { Geist } from "next/font/google";
 import "./globals.css";
@@ -76,9 +77,10 @@ export default function RootLayout({
         </Script>
 
         <noscript>
-          <img
-            height="1"
-            width="1"
+          <Image
+            height={1}
+            width={1}
+            unoptimized
             style={{ display: "none" }}
             src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
             alt=""
