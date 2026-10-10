@@ -497,7 +497,20 @@ export default function Home() {
       {/* FOOTER */}
       <footer className="border-t border-[#556149]/10 px-5 py-7 sm:px-6 lg:px-10">
         <div className="scroll-reveal mx-auto flex max-w-7xl flex-col items-center gap-3 text-center text-sm text-[#747c6c] sm:flex-row sm:justify-between sm:text-left">
-          <p>© Merena Beachwear</p>
+          <div>
+            <p>© Merena Beachwear</p>
+            <p className="mt-1 text-xs">
+              Desenvolvido por{" "}
+              <a
+                href="https://github.com/developerigor7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition hover:text-[#34422d]"
+              >
+                @developerigor7
+              </a>
+            </p>
+          </div>
 
           <div className="flex items-center gap-4">
             <a
