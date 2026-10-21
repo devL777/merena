@@ -6,7 +6,7 @@ import { defaultProducts, type Product } from "@/lib/products";
 import { defaultSiteAssets, type SiteAsset } from "@/lib/site-assets";
 
 const whatsappUrl = "https://wa.link/ohf93g";
-const catalogUrl = "https://wa.me/c/250904154501186";
+const catalogUrl = "https://wa.me/c/553190914448";
 const instagramUrl = "https://www.instagram.com/beachwear.merena/";
 const facebookUrl = "https://www.facebook.com/people/Merena-Beachwear/61570299508001/";
 const whatsappProductNumber = "250904154501186";
