@@ -502,12 +502,12 @@ export default function Home() {
             <p className="mt-1 text-xs">
               Desenvolvido por{" "}
               <a
-                href="https://github.com/developerigor7"
+                href="https://github.com/devL777"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition hover:text-[#34422d]"
               >
-                @developerigor7
+                @devL777
               </a>
             </p>
           </div>
